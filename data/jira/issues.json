@@ -1,0 +1,42 @@
+[
+    {
+        "id": "CLOUD-102",
+        "title": "Evaluate GCP migration",
+        "description": "Investigate migration from AWS to GCP. Focus on cost reduction and performance improvements.",
+        "assignee": "Priya",
+        "created": "2023-03-18T09:00:00Z",
+        "status": "Completed",
+        "priority": "High",
+        "project": "CLOUD"
+    },
+    {
+        "id": "CLOUD-105",
+        "title": "Implement GCP deployment pipeline",
+        "description": "Set up CI/CD for GCP using Cloud Build",
+        "assignee": "Rahul",
+        "created": "2023-04-01T10:00:00Z",
+        "status": "Completed",
+        "priority": "High",
+        "project": "CLOUD"
+    },
+    {
+        "id": "CLOUD-108",
+        "title": "Database migration to Cloud SQL",
+        "description": "Migrate PostgreSQL database from AWS RDS to GCP Cloud SQL",
+        "assignee": "Amit",
+        "created": "2023-04-15T13:00:00Z",
+        "status": "Completed",
+        "priority": "Medium",
+        "project": "CLOUD"
+    },
+    {
+        "id": "CLOUD-112",
+        "title": "Decommission AWS infrastructure",
+        "description": "Complete decommissioning of AWS services after successful GCP migration",
+        "assignee": "Rahul",
+        "created": "2023-05-10T11:00:00Z",
+        "status": "In Progress",
+        "priority": "Medium",
+        "project": "CLOUD"
+    }
+]

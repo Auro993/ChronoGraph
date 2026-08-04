@@ -1,0 +1,37 @@
+[
+    {
+        "id": "commit_001",
+        "author": "Priya",
+        "timestamp": "2023-03-18T10:30:00Z",
+        "message": "docs: Add GCP migration evaluation proposal",
+        "files": ["docs/gcp_migration.md"]
+    },
+    {
+        "id": "commit_002",
+        "author": "Rahul",
+        "timestamp": "2023-04-20T08:15:00Z",
+        "message": "Add initial GCP deployment configuration",
+        "files": ["terraform/gcp/main.tf", "terraform/gcp/variables.tf"]
+    },
+    {
+        "id": "commit_003",
+        "author": "Priya",
+        "timestamp": "2023-04-25T14:30:00Z",
+        "message": "Migrate API service to GCP Cloud Run",
+        "files": ["api/deploy.yaml", "api/Dockerfile"]
+    },
+    {
+        "id": "commit_004",
+        "author": "Amit",
+        "timestamp": "2023-05-01T11:20:00Z",
+        "message": "Update database connections for GCP Cloud SQL",
+        "files": ["backend/config/database.py"]
+    },
+    {
+        "id": "commit_005",
+        "author": "Rahul",
+        "timestamp": "2023-05-15T16:00:00Z",
+        "message": "Remove AWS-specific configurations",
+        "files": ["terraform/aws/", "aws_config_backup/"]
+    }
+]

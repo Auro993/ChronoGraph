@@ -1,0 +1,44 @@
+[
+    {
+        "id": "slack_001",
+        "user": "Rahul",
+        "channel": "engineering",
+        "timestamp": "2023-03-10T09:30:00Z",
+        "message": "AWS infrastructure costs have increased significantly this quarter. We're spending $45K/month now, up from $30K last year."
+    },
+    {
+        "id": "slack_002",
+        "user": "Priya",
+        "channel": "architecture",
+        "timestamp": "2023-03-15T14:20:00Z",
+        "message": "I've been analyzing our cloud spend. GCP could reduce our infrastructure costs by ~30% with similar performance. We should evaluate migration."
+    },
+    {
+        "id": "slack_003",
+        "user": "Priya",
+        "channel": "architecture",
+        "timestamp": "2023-03-20T11:15:00Z",
+        "message": "Created CLOUD-102 to formally evaluate the AWS to GCP migration. Let's discuss in the next architecture review."
+    },
+    {
+        "id": "slack_004",
+        "user": "Rahul",
+        "channel": "engineering",
+        "timestamp": "2023-04-05T16:45:00Z",
+        "message": "GCP migration planning is going well. The team is comfortable with the new infrastructure patterns."
+    },
+    {
+        "id": "slack_005",
+        "user": "Amit",
+        "channel": "engineering",
+        "timestamp": "2023-04-25T10:00:00Z",
+        "message": "We completed the initial GCP deployment. Latency is actually better than AWS in some regions."
+    },
+    {
+        "id": "slack_006",
+        "user": "Rahul",
+        "channel": "engineering",
+        "timestamp": "2023-05-15T13:30:00Z",
+        "message": "MIGRATION COMPLETE: All services are now running on GCP. Final AWS shutdown scheduled for next week."
+    }
+]
