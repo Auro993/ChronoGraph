@@ -1,8 +1,7 @@
-.app {
+﻿.app {
   min-height: 100vh;
 }
 
-/* Navbar */
 .navbar {
   background: #121926;
   border-bottom: 1px solid #1a2a3a;
@@ -44,7 +43,6 @@
   color: #ffffff;
 }
 
-/* Dashboard */
 .dashboard {
   padding: 40px 20px;
   max-width: 1200px;
@@ -86,7 +84,6 @@
   margin-bottom: 5px;
 }
 
-/* Investigation */
 .investigation-container {
   max-width: 1000px;
   margin: 40px auto;
@@ -174,7 +171,6 @@
   margin-bottom: 20px;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .question-form {
     flex-direction: column;

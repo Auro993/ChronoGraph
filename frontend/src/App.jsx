@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+﻿import React, { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import './styles/App.css'
 
@@ -12,7 +12,7 @@ function App() {
     setLoading(true)
     
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch('/api/chat/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
