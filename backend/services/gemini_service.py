@@ -1,6 +1,7 @@
 ﻿import google.generativeai as genai 
 import json
 import os
+import time
 
 class GeminiService:
     def __init__(self):
@@ -14,6 +15,26 @@ class GeminiService:
         self.temperature = 0.7
         
         print(f"✅ Gemini service initialized with model: models/gemini-2.0-flash")
+
+    def call_with_retry(self, prompt, max_retries=5):
+        """Call Gemini with exponential backoff for rate limits"""
+        for attempt in range(max_retries):
+            try:
+                response = self.model.generate_content(
+                    prompt,
+                    generation_config={"temperature": self.temperature}
+                )
+                return response
+            except Exception as e:
+                error_str = str(e)
+                if "429" in error_str and attempt < max_retries - 1:
+                    # Exponential backoff: 5, 10, 20, 40, 80 seconds
+                    wait_time = (2 ** attempt) * 5
+                    print(f"⏳ Rate limited. Waiting {wait_time}s before retry {attempt + 1}/{max_retries}...")
+                    time.sleep(wait_time)
+                else:
+                    raise e
+        return None
 
     def extract_entities_and_relationships(self, text: str) -> dict:
         try:
@@ -39,12 +60,11 @@ Return the result as a JSON object with the following structure:
 
 Text: {text}
 """
-            response = self.model.generate_content(
-                prompt,
-                generation_config={"temperature": self.temperature}
-            )
-            result = json.loads(response.text)
-            return result
+            response = self.call_with_retry(prompt)
+            if response:
+                result = json.loads(response.text)
+                return result
+            return {"entities": [], "relationships": []}
         except Exception as e:
             print(f"Error in extraction: {e}")
             return {"entities": [], "relationships": []}
@@ -66,11 +86,10 @@ Provide a detailed answer with:
 
 Answer:
 """
-            response = self.model.generate_content(
-                prompt,
-                generation_config={"temperature": self.temperature}
-            )
-            return response.text
+            response = self.call_with_retry(prompt, max_retries=3)
+            if response:
+                return response.text
+            return "I'm unable to process this question right now due to rate limits."
         except Exception as e:
             print(f"Error generating answer: {e}")
             return "I'm unable to process this question right now."
@@ -88,12 +107,11 @@ Return as JSON:
 
 Question: {question}
 """
-            response = self.model.generate_content(
-                prompt,
-                generation_config={"temperature": self.temperature}
-            )
-            result = json.loads(response.text)
-            return result
+            response = self.call_with_retry(prompt, max_retries=3)
+            if response:
+                result = json.loads(response.text)
+                return result
+            return {"entities": [], "intent": "what", "topic": ""}
         except Exception as e:
             print(f"Error extracting question entities: {e}")
             return {"entities": [], "intent": "what", "topic": ""}
@@ -109,11 +127,10 @@ Events:
 
 Provide a concise summary (2-3 sentences per major event):
 """
-            response = self.model.generate_content(
-                prompt,
-                generation_config={"temperature": 0.3}
-            )
-            return response.text
+            response = self.call_with_retry(prompt, max_retries=3)
+            if response:
+                return response.text
+            return "Unable to generate summary due to rate limits."
         except Exception as e:
             print(f"Error generating summary: {e}")
             return "Unable to generate summary."
