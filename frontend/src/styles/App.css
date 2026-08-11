@@ -499,3 +499,25 @@
     padding: 20px;
   }
 }
+/* Answer Header with Export Button */
+.answer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.export-btn {
+  padding: 8px 16px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 14px;
+}
+
+.export-btn:hover {
+  background: #34ce57;
+}

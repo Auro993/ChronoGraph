@@ -17,6 +17,31 @@ class ChatResponse(BaseModel):
     graph: dict = {}
     sources: list = []
 
+def save_chat_history(question, answer, timeline, graph, sources):
+    """Save chat to history in MySQL"""
+    try:
+        mysql = MySQLService()
+        if not mysql.connection:
+            return
+        
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            INSERT INTO chat_history (question, answer, timeline, graph, sources)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (
+            question,
+            answer,
+            json.dumps(timeline),
+            json.dumps(graph),
+            json.dumps(sources)
+        ))
+        mysql.connection.commit()
+        cursor.close()
+        mysql.close()
+        print("✅ Chat saved to history")
+    except Exception as e:
+        print(f"⚠️ Failed to save chat history: {e}")
+
 @router.post("/", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
     try:
@@ -108,7 +133,10 @@ Historical Events:
             print(f"⚠️  Gemini error: {e}")
             answer = generate_fallback_answer(request.question, context, timeline)
         
-        # Step 5: Return the complete response
+        # Step 5: Save to history
+        save_chat_history(request.question, answer, timeline, graph, sources)
+        
+        # Step 6: Return the complete response
         return ChatResponse(
             answer=answer,
             timeline=timeline,
@@ -424,5 +452,61 @@ async def get_relationships():
         mysql.close()
         
         return {"status": "success", "relationships": relationships}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@router.get("/history")
+async def get_chat_history(limit: int = 20):
+    """Get chat history from MySQL"""
+    try:
+        mysql = MySQLService()
+        if not mysql.connection:
+            return {"status": "error", "message": "MySQL not connected"}
+        
+        cursor = mysql.connection.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT id, question, answer, timeline, graph, sources, created_at
+            FROM chat_history
+            ORDER BY created_at DESC
+            LIMIT %s
+        """, (limit,))
+        
+        history = cursor.fetchall()
+        
+        # Parse JSON fields
+        for item in history:
+            item['timeline'] = json.loads(item['timeline']) if item['timeline'] else []
+            item['graph'] = json.loads(item['graph']) if item['graph'] else {}
+            item['sources'] = json.loads(item['sources']) if item['sources'] else []
+            item['created_at'] = str(item['created_at'])
+        
+        cursor.close()
+        mysql.close()
+        
+        return {"status": "success", "history": history}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+
+@router.get("/search")
+async def search_entities(q: str):
+    """Search for entities in MySQL"""
+    try:
+        mysql = MySQLService()
+        if not mysql.connection:
+            return {"status": "error", "message": "MySQL not connected"}
+        
+        cursor = mysql.connection.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT id, name, type, source, source_id
+            FROM entities
+            WHERE name LIKE %s OR type LIKE %s
+            LIMIT 20
+        """, (f"%{q}%", f"%{q}%"))
+        
+        results = cursor.fetchall()
+        cursor.close()
+        mysql.close()
+        
+        return {"status": "success", "results": results}
     except Exception as e:
         return {"status": "error", "message": str(e)}

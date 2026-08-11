@@ -5,6 +5,7 @@ import './styles/App.css'
 // Import components
 import KnowledgeGraph from './components/KnowledgeGraph'
 import Timeline from './components/Timeline'
+import ChatHistory from './components/ChatHistory'
 
 function App() {
   const [question, setQuestion] = useState('')
@@ -40,6 +41,28 @@ function App() {
     }
   }
 
+  const exportResults = () => {
+    if (!answer) return;
+    
+    const data = {
+      question: question,
+      answer: answer,
+      timeline: timeline,
+      graph: graph,
+      sources: sources,
+      exported_at: new Date().toISOString()
+    };
+    
+    // Download as JSON
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `investigation_${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <Router>
       <div className="app">
@@ -52,6 +75,7 @@ function App() {
               <Link to="/graph">Knowledge Graph</Link>
               <Link to="/timeline">Timeline</Link>
               <Link to="/sources">Data Sources</Link>
+              <Link to="/history">History</Link>
             </div>
           </div>
         </nav>
@@ -78,7 +102,12 @@ function App() {
 
               {answer && (
                 <div className="answer-container">
-                  <h2>AI Analysis</h2>
+                  <div className="answer-header">
+                    <h2>AI Analysis</h2>
+                    <button className="export-btn" onClick={exportResults}>
+                      📥 Export
+                    </button>
+                  </div>
                   <div className="answer-content">{answer}</div>
                   
                   {timeline.length > 0 && (
@@ -117,6 +146,7 @@ function App() {
           <Route path="/graph" element={<GraphExplorer />} />
           <Route path="/timeline" element={<TimelinePage />} />
           <Route path="/sources" element={<DataSources />} />
+          <Route path="/history" element={<HistoryPage />} />
         </Routes>
       </div>
     </Router>
@@ -231,6 +261,16 @@ function DataSources() {
           </div>
         ))}
       </div>
+    </div>
+  )
+}
+
+function HistoryPage() {
+  return (
+    <div className="page">
+      <h1>Chat History</h1>
+      <p className="subtitle">View your past investigations</p>
+      <ChatHistory />
     </div>
   )
 }
