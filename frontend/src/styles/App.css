@@ -521,3 +521,126 @@
 .export-btn:hover {
   background: #34ce57;
 }
+/* Loading container */
+.loading-container {
+  margin: 30px 0;
+  padding: 20px;
+  background: #121926;
+  border-radius: 12px;
+  border: 1px solid #1a2a3a;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.empty-state-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.empty-state h3 {
+  color: #e0e0e0;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.empty-state p {
+  color: #6c8ba0;
+  margin-bottom: 20px;
+}
+
+.example-questions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.example-btn {
+  width: 100%;
+  padding: 12px 20px;
+  background: #1a1f2e;
+  border: 1px solid #1a2a3a;
+  border-radius: 8px;
+  color: #a0b0c0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  font-size: 14px;
+}
+
+.example-btn:hover {
+  border-color: #4a6cf7;
+  background: #1a2a3a;
+  transform: translateX(5px);
+}
+
+/* Smooth page transitions */
+.page {
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card hover effects */
+.stat-card,
+.source-card,
+.history-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover,
+.source-card:hover {
+  transform: translateY(-8px);
+  border-color: #4a6cf7;
+  box-shadow: 0 10px 40px rgba(74, 108, 247, 0.15);
+}
+
+.history-item:hover {
+  transform: translateX(5px);
+  border-color: #2a3a4a;
+}
+
+/* Button animations */
+.investigate-btn,
+.export-btn,
+.refresh-btn {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.investigate-btn:active::after,
+.export-btn:active::after,
+.refresh-btn:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Graph loading state */
+.graph-loading {
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0e17;
+  border-radius: 12px;
+}
