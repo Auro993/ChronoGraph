@@ -69,8 +69,8 @@ async def chat_endpoint(request: ChatRequest):
         
         # Step 3: If MySQL has data, use it; otherwise use mock data
         if graph_data and graph_data.get("relationships"):
-            # Build context from MySQL data
-            context = build_context_from_graph(graph_data)
+            # Build temporal context from MySQL data (chronological)
+            context = build_temporal_context(graph_data)
             
             # Build timeline from MySQL data
             timeline = build_timeline_from_graph(graph_data)
@@ -84,35 +84,52 @@ async def chat_endpoint(request: ChatRequest):
             print("⚠️  Using mock data (MySQL not available or no data found)")
             # Use mock data as fallback
             context = """
-Historical Events:
-- March 10, 2023: Rahul reported AWS infrastructure costs increased
-- March 15, 2023: Priya proposed evaluating GCP as an alternative
-- March 18, 2023: Jira issue CLOUD-102 created for GCP migration
-- April 20, 2023: Rahul added initial GCP deployment configuration
-- April 25, 2023: Amit completed initial GCP deployment
-- May 15, 2023: Migration to GCP completed
+Chronological sequence of events:
+
+1. 2023-03-10: Rahul reported AWS infrastructure costs increased significantly
+   Source: Slack (slack_001)
+
+2. 2023-03-15: Priya proposed evaluating GCP as an alternative to AWS
+   Source: Slack (slack_002)
+
+3. 2023-03-18: Jira issue CLOUD-102 created to track GCP migration
+   Source: Jira (CLOUD-102)
+
+4. 2023-04-20: Rahul added initial GCP deployment configuration
+   Source: GitHub (commit_002)
+
+5. 2023-04-25: Amit completed initial GCP deployment
+   Source: Slack (slack_005)
+
+6. 2023-05-15: Migration to GCP completed
+   Source: GitHub (commit_005)
 """
             timeline = [
-                {"date": "2023-03-10", "event": "AWS cost problem reported", "source": "Slack"},
-                {"date": "2023-03-15", "event": "GCP migration proposed", "source": "Slack"},
-                {"date": "2023-03-18", "event": "CLOUD-102 created", "source": "Jira"},
-                {"date": "2023-04-20", "event": "Initial GCP deployment", "source": "GitHub"},
-                {"date": "2023-04-25", "event": "GCP deployment completed", "source": "Slack"},
-                {"date": "2023-05-15", "event": "Migration completed", "source": "GitHub"},
+                {"date": "2023-03-10", "event": "AWS cost problem reported", "source": "Slack", "source_id": "slack_001"},
+                {"date": "2023-03-15", "event": "GCP migration proposed", "source": "Slack", "source_id": "slack_002"},
+                {"date": "2023-03-18", "event": "CLOUD-102 created", "source": "Jira", "source_id": "CLOUD-102"},
+                {"date": "2023-04-20", "event": "Initial GCP deployment", "source": "GitHub", "source_id": "commit_002"},
+                {"date": "2023-04-25", "event": "GCP deployment completed", "source": "Slack", "source_id": "slack_005"},
+                {"date": "2023-05-15", "event": "Migration completed", "source": "GitHub", "source_id": "commit_005"},
             ]
             graph = {
                 "nodes": [
                     {"id": "Rahul", "type": "Person"},
                     {"id": "Priya", "type": "Person"},
+                    {"id": "Amit", "type": "Person"},
                     {"id": "AWS", "type": "Technology"},
                     {"id": "GCP", "type": "Technology"},
                     {"id": "CLOUD-102", "type": "Project"},
+                    {"id": "GCP Migration", "type": "Decision"},
                 ],
                 "edges": [
-                    {"source": "Rahul", "target": "AWS", "label": "reported_cost_issue"},
-                    {"source": "Priya", "target": "GCP", "label": "proposed_migration"},
-                    {"source": "CLOUD-102", "target": "GCP", "label": "evaluates"},
-                    {"source": "GCP", "target": "AWS", "label": "replaces"},
+                    {"source": "Rahul", "target": "AWS", "label": "REPORTED_COST_ISSUE"},
+                    {"source": "Priya", "target": "GCP", "label": "PROPOSED_MIGRATION"},
+                    {"source": "Priya", "target": "CLOUD-102", "label": "CREATED"},
+                    {"source": "CLOUD-102", "target": "GCP Migration", "label": "TRACKS"},
+                    {"source": "Rahul", "target": "GCP", "label": "IMPLEMENTED"},
+                    {"source": "Amit", "target": "GCP", "label": "DEPLOYED"},
+                    {"source": "GCP", "target": "AWS", "label": "REPLACES"},
                 ]
             }
             sources = [
@@ -120,15 +137,20 @@ Historical Events:
                 {"id": "slack_002", "source": "Slack", "date": "2023-03-15", "channel": "architecture"},
                 {"id": "CLOUD-102", "source": "Jira", "date": "2023-03-18", "type": "Issue"},
                 {"id": "commit_002", "source": "GitHub", "date": "2023-04-20", "repo": "main"},
+                {"id": "slack_005", "source": "Slack", "date": "2023-04-25", "channel": "engineering"},
+                {"id": "commit_005", "source": "GitHub", "date": "2023-05-15", "repo": "main"},
             ]
         
-        # Step 4: Generate answer using Gemini with fallback
+        # Step 4: Generate answer using Gemini with temporal context
         try:
             answer = gemini_service.generate_answer(request.question, context)
             # Check if Gemini returned an error message
             if "unable to process" in answer.lower() or "rate limit" in answer.lower():
                 print("⚠️  Gemini rate-limited, using fallback answer")
                 answer = generate_fallback_answer(request.question, context, timeline)
+            else:
+                # Add citations to the answer
+                answer = add_citations_to_answer(answer, sources)
         except Exception as e:
             print(f"⚠️  Gemini error: {e}")
             answer = generate_fallback_answer(request.question, context, timeline)
@@ -150,22 +172,50 @@ Historical Events:
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
-def build_context_from_graph(graph_data):
-    """Build a text context from graph data"""
+def build_temporal_context(graph_data):
+    """Build a chronological context from graph data"""
     if not graph_data or not graph_data.get("relationships"):
         return "No historical data found for this query."
     
-    context = "Historical events and relationships:\n\n"
-    for rel in graph_data["relationships"]:
-        context += f"- {rel['source']} {rel['relationship']} {rel['target']} "
-        if rel.get('timestamp'):
-            context += f"(Date: {rel['timestamp']}) "
-        context += f"[Source: {rel.get('data_source', 'Unknown')}]\n"
+    # Sort relationships by timestamp
+    relationships = sorted(
+        graph_data["relationships"], 
+        key=lambda x: x.get("timestamp", ""), 
+        reverse=False
+    )
+    
+    context = "Chronological sequence of events:\n\n"
+    
+    for i, rel in enumerate(relationships, 1):
+        timestamp = rel.get("timestamp", "Unknown date")
+        source_name = rel.get("source", "Unknown")
+        target_name = rel.get("target", "Unknown")
+        relation = rel.get("relationship", "related to")
+        data_source = rel.get("data_source", "Unknown")
+        source_id = rel.get("source_id", "")
+        
+        context += f"{i}. {timestamp}: {source_name} {relation} {target_name}\n"
+        context += f"   Source: {data_source} ({source_id})\n\n"
     
     return context
 
+def add_citations_to_answer(answer, sources):
+    """Add source citations to the answer"""
+    if not sources:
+        return answer
+    
+    citation_text = "\n\n---\n\n📚 **Sources:**\n"
+    for i, source in enumerate(sources, 1):
+        source_id = source.get("id", "")
+        source_name = source.get("source", "Unknown")
+        source_date = source.get("date", "")
+        
+        citation_text += f"[{i}] {source_name} - {source_date} ({source_id})\n"
+    
+    return answer + citation_text
+
 def build_timeline_from_graph(graph_data):
-    """Build a timeline from graph data"""
+    """Build a timeline from graph data with chronological order"""
     timeline = []
     
     # Process relationships into timeline events
@@ -245,17 +295,35 @@ def generate_fallback_answer(question: str, context: str, timeline: list) -> str
         return """
 ## 🔍 Investigation Results: AWS to GCP Migration
 
-### 📅 Timeline of Events
+### 📅 Timeline of Events (Chronological Order)
+
 Based on your historical data, here's what happened:
 
-| Date | Event | Source |
-|------|-------|--------|
-| **March 10, 2023** | Rahul reported AWS infrastructure costs increased significantly | Slack |
-| **March 15, 2023** | Priya proposed evaluating GCP as a cost-effective alternative | Slack |
-| **March 18, 2023** | Jira issue CLOUD-102 created to formally track the migration | Jira |
-| **April 20, 2023** | Rahul added the initial GCP deployment configuration | GitHub |
-| **April 25, 2023** | Amit completed the initial GCP deployment | Slack |
-| **May 15, 2023** | Migration to GCP completed | GitHub |
+| # | Date | Event | Source |
+|---|------|-------|--------|
+| 1 | **March 10, 2023** | Rahul reported AWS infrastructure costs increased significantly | Slack |
+| 2 | **March 15, 2023** | Priya proposed evaluating GCP as a cost-effective alternative | Slack |
+| 3 | **March 18, 2023** | Jira issue CLOUD-102 created to formally track the migration | Jira |
+| 4 | **April 20, 2023** | Rahul added the initial GCP deployment configuration | GitHub |
+| 5 | **April 25, 2023** | Amit completed the initial GCP deployment | Slack |
+| 6 | **May 15, 2023** | Migration to GCP completed | GitHub |
+
+### 🔗 How Events Connect
+Rahul (Mar 10)
+↓ reported cost issue
+AWS (Mar 10)
+↓ triggered evaluation
+Priya (Mar 15)
+↓ proposed migration
+GCP (Mar 15)
+↓ created tracking
+CLOUD-102 (Mar 18)
+↓ tracked progress
+Rahul (Apr 20) → implemented GCP
+Amit (Apr 25) → deployed GCP
+GCP (May 15) → replaced AWS
+
+text
 
 ### 🎯 Key Decision Drivers
 1. **Cost Optimization**: AWS infrastructure costs had increased significantly
@@ -263,14 +331,15 @@ Based on your historical data, here's what happened:
 3. **Team Initiative**: Priya and Rahul led the evaluation and implementation
 
 ### 👥 Key Players
-- **Rahul**: Identified cost problem, implemented GCP deployment
-- **Priya**: Proposed migration, created CLOUD-102
-- **Amit**: Deployed GCP infrastructure
+- **Rahul**: Identified cost problem (Mar 10), implemented GCP deployment (Apr 20)
+- **Priya**: Proposed migration (Mar 15), created CLOUD-102 (Mar 18)
+- **Amit**: Deployed GCP infrastructure (Apr 25)
 
 ### 📊 Decision Impact
 The migration successfully reduced infrastructure costs while maintaining performance, as evidenced by the completion timeline and team feedback.
 
-*Sources: Slack messages, GitHub commits, and Jira issues*
+---
+📚 **Sources:** Slack messages, GitHub commits, and Jira issues
         """
     
     # Check if question is about who proposed migration
@@ -284,13 +353,22 @@ The migration successfully reduced infrastructure costs while maintaining perfor
 - **Action**: Priya suggested evaluating GCP as an alternative to AWS
 - **Channel**: #architecture on Slack
 - **Reason**: Identified that GCP could reduce infrastructure costs by ~30%
-- **Follow-up**: Created Jira issue CLOUD-102 to formally track the migration
+- **Follow-up**: Created Jira issue CLOUD-102 on March 18, 2023
 
-### 🔗 Sources:
-- Slack message from Priya (slack_002)
-- Jira issue CLOUD-102
+### 🔗 Chronological Context:
+March 10: Rahul reported AWS cost issue
+↓
+March 15: Priya proposed GCP migration ← YOU ARE HERE
+↓
+March 18: CLOUD-102 created
+↓
+April 20: Rahul implemented GCP
 
-The proposal was well-received and led to the successful migration from AWS to GCP.
+text
+
+### 📚 Sources:
+- [1] Slack message from Priya (slack_002) - March 15, 2023
+- [2] Jira issue CLOUD-102 - March 18, 2023
         """
     
     # Check if question is about March 2023
@@ -300,24 +378,37 @@ The proposal was well-received and led to the successful migration from AWS to G
 
 ### Key Events Timeline:
 
-| Date | Event |
-|------|-------|
-| **March 10** | Rahul reported AWS infrastructure costs had increased significantly |
-| **March 15** | Priya proposed evaluating GCP as an alternative to AWS |
-| **March 18** | Jira issue CLOUD-102 was created to track the GCP migration |
+| Date | Event | Source |
+|------|-------|--------|
+| **March 10** | Rahul reported AWS infrastructure costs had increased significantly | Slack |
+| **March 15** | Priya proposed evaluating GCP as an alternative to AWS | Slack |
+| **March 18** | Jira issue CLOUD-102 was created to track the GCP migration | Jira |
 
 ### 📝 Summary
-March 2023 was a pivotal month that marked the beginning of the AWS to GCP migration journey. The cost concerns raised by Rahul led to Priya's proposal, which was formally tracked through Jira issue CLOUD-102.
+March 2023 was a pivotal month that marked the beginning of the AWS to GCP migration journey. The cost concerns raised by Rahul (March 10) led to Priya's proposal (March 15), which was formally tracked through Jira issue CLOUD-102 (March 18).
+
+### 🔗 Event Sequence:
+March 10 ──► March 15 ──► March 18
+│ │ │
+Rahul Priya CLOUD-102
+reports proposes created
+AWS cost GCP to track
+issue migration migration
+
+text
 
 ### 📊 Impact
 These events set the stage for the migration that would be completed in May 2023.
+
+---
+📚 **Sources:** Slack messages and Jira issues
         """
     
     # Build a generic response from timeline data
     if timeline:
         timeline_text = "\n".join([
-            f"- **{event['date']}**: {event['event']} (Source: {event['source']})"
-            for event in timeline[:5]  # Show first 5 events
+            f"{i+1}. **{event['date']}**: {event['event']} (Source: {event['source']})"
+            for i, event in enumerate(timeline[:5])
         ])
         
         return f"""
@@ -326,13 +417,12 @@ These events set the stage for the migration that would be completed in May 2023
 ### 📋 Your Question
 "{question}"
 
-### 📊 Relevant Timeline
-Based on the historical data in ChronoGraph:
+### 📊 Relevant Timeline (Chronological Order)
 
 {timeline_text}
 
 ### 💡 Insights
-The system has detected this question about your engineering history. The timeline above shows the relevant events from your data.
+The system has detected this question about your engineering history. The timeline above shows the relevant events from your data in chronological order.
 
 ### 📁 Available Data
 - Slack conversations
@@ -347,6 +437,9 @@ For more details, try:
    - "Who proposed the GCP migration?"
    - "What happened in March 2023?"
    - "When was CLOUD-102 created?"
+
+---
+📚 **Sources:** Your enterprise data (Slack, GitHub, Jira)
         """
     
     # Ultimate fallback
@@ -360,9 +453,9 @@ For more details, try:
 The ChronoGraph system has the following data available:
 
 **Data Sources:**
-- Slack: 6 messages
-- GitHub: 5 commits
-- Jira: 4 issues
+- Slack: 6+ messages
+- GitHub: 5+ commits
+- Jira: 4+ issues
 
 ### 💡 How to Get Better Answers
 1. Be specific in your questions

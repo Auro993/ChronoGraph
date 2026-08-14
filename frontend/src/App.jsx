@@ -6,6 +6,8 @@ import './styles/App.css'
 import KnowledgeGraph from './components/KnowledgeGraph'
 import Timeline from './components/Timeline'
 import ChatHistory from './components/ChatHistory'
+import Toast from './components/Toast'
+import LoadingSpinner from './components/LoadingSpinner'
 
 function App() {
   const [question, setQuestion] = useState('')
@@ -14,9 +16,16 @@ function App() {
   const [graph, setGraph] = useState({ nodes: [], edges: [] })
   const [sources, setSources] = useState([])
   const [loading, setLoading] = useState(false)
+  const [toast, setToast] = useState(null)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    if (!question.trim()) {
+      setToast({ message: 'Please enter a question', type: 'warning' })
+      return
+    }
+    
     setLoading(true)
     
     try {
@@ -28,40 +37,53 @@ function App() {
         body: JSON.stringify({ question }),
       })
       
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
       setAnswer(data.answer)
       setTimeline(data.timeline || [])
       setGraph(data.graph || { nodes: [], edges: [] })
       setSources(data.sources || [])
+      setToast({ message: 'Investigation complete!', type: 'success' })
     } catch (error) {
       console.error('Error:', error)
       setAnswer('Error connecting to the server. Please try again.')
+      setToast({ message: 'Failed to get response. Please try again.', type: 'error' })
     } finally {
       setLoading(false)
     }
   }
 
   const exportResults = () => {
-    if (!answer) return;
+    if (!answer) {
+      setToast({ message: 'No results to export', type: 'warning' })
+      return
+    }
     
-    const data = {
-      question: question,
-      answer: answer,
-      timeline: timeline,
-      graph: graph,
-      sources: sources,
-      exported_at: new Date().toISOString()
-    };
-    
-    // Download as JSON
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `investigation_${Date.now()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+    try {
+      const data = {
+        question: question,
+        answer: answer,
+        timeline: timeline,
+        graph: graph,
+        sources: sources,
+        exported_at: new Date().toISOString()
+      }
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `investigation_${Date.now()}.json`
+      a.click()
+      URL.revokeObjectURL(url)
+      setToast({ message: 'Export successful!', type: 'success' })
+    } catch (error) {
+      setToast({ message: 'Export failed. Please try again.', type: 'error' })
+    }
+  }
 
   return (
     <Router>
@@ -99,6 +121,46 @@ function App() {
                   {loading ? 'Investigating...' : 'Investigate'}
                 </button>
               </form>
+
+              {loading && (
+                <div className="loading-container">
+                  <LoadingSpinner text="Analyzing your question..." />
+                </div>
+              )}
+
+              {!answer && !loading && (
+                <div className="empty-state">
+                  <div className="empty-state-icon">🔍</div>
+                  <h3>Ask a question to start investigating</h3>
+                  <p>Try asking about your engineering history, like:</p>
+                  <div className="example-questions">
+                    <button 
+                      onClick={() => setQuestion("Why did we migrate from AWS to GCP?")} 
+                      className="example-btn"
+                    >
+                      Why did we migrate from AWS to GCP?
+                    </button>
+                    <button 
+                      onClick={() => setQuestion("Who proposed the GCP migration?")} 
+                      className="example-btn"
+                    >
+                      Who proposed the GCP migration?
+                    </button>
+                    <button 
+                      onClick={() => setQuestion("What happened in March 2023?")} 
+                      className="example-btn"
+                    >
+                      What happened in March 2023?
+                    </button>
+                    <button 
+                      onClick={() => setQuestion("When was CLOUD-102 created?")} 
+                      className="example-btn"
+                    >
+                      When was CLOUD-102 created?
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {answer && (
                 <div className="answer-container">
@@ -148,6 +210,14 @@ function App() {
           <Route path="/sources" element={<DataSources />} />
           <Route path="/history" element={<HistoryPage />} />
         </Routes>
+
+        {toast && (
+          <Toast 
+            message={toast.message} 
+            type={toast.type} 
+            onClose={() => setToast(null)} 
+          />
+        )}
       </div>
     </Router>
   )
@@ -275,4 +345,4 @@ function HistoryPage() {
   )
 }
 
-export default App
+export default App  // ✅ Fixed - was "Apps" before

@@ -40,5 +40,33 @@
         "channel": "engineering",
         "timestamp": "2023-05-15T13:30:00Z",
         "message": "MIGRATION COMPLETE: All services are now running on GCP. Final AWS shutdown scheduled for next week."
+    },
+    {
+        "id": "slack_007",
+        "user": "Priya",
+        "channel": "architecture",
+        "timestamp": "2023-03-22T10:00:00Z",
+        "message": "I've created a detailed migration plan. We'll move services in phases starting with non-critical workloads."
+    },
+    {
+        "id": "slack_008",
+        "user": "Rahul",
+        "channel": "engineering",
+        "timestamp": "2023-04-01T15:30:00Z",
+        "message": "Phase 1 migration started. API gateway is now running on GCP Cloud Run. No issues so far."
+    },
+    {
+        "id": "slack_009",
+        "user": "Amit",
+        "channel": "engineering",
+        "timestamp": "2023-04-10T09:15:00Z",
+        "message": "Database migration to GCP Cloud SQL is in progress. We're doing a phased approach with minimal downtime."
+    },
+    {
+        "id": "slack_010",
+        "user": "Priya",
+        "channel": "architecture",
+        "timestamp": "2023-05-01T11:00:00Z",
+        "message": "All critical services are now on GCP. The migration has been successful! Thanks everyone for the hard work."
     }
 ]

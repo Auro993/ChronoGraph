@@ -2,7 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 from backend.config import config
 import logging
-import time
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +68,7 @@ class MySQLService:
                 )
             """)
             
-            # Create relationships table
+            # Create relationships table with timestamp support
             self.cursor.execute("""
                 CREATE TABLE IF NOT EXISTS relationships (
                     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -84,6 +84,20 @@ class MySQLService:
                     FOREIGN KEY (target_entity_id) REFERENCES entities(id) ON DELETE CASCADE,
                     INDEX idx_relation (relation_type),
                     INDEX idx_timestamp (timestamp)
+                )
+            """)
+            
+            # Create chat history table
+            self.cursor.execute("""
+                CREATE TABLE IF NOT EXISTS chat_history (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    question TEXT NOT NULL,
+                    answer TEXT,
+                    timeline JSON,
+                    graph JSON,
+                    sources JSON,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                    INDEX idx_created (created_at)
                 )
             """)
             
@@ -123,7 +137,6 @@ class MySQLService:
                 return result['id']
             
             # Create new entity
-            import json
             self.cursor.execute("""
                 INSERT INTO entities (name, type, source, source_id, properties)
                 VALUES (%s, %s, %s, %s, %s)
@@ -138,13 +151,12 @@ class MySQLService:
     
     def create_relationship(self, source_id, target_id, relation_type, 
                            timestamp=None, source=None, source_id_ref=None, properties=None):
-        """Create a relationship between entities"""
+        """Create a relationship between entities with timestamp"""
         if not self.connection:
             print("❌ No database connection")
             return None
         
         try:
-            import json
             self.cursor.execute("""
                 INSERT INTO relationships 
                 (source_entity_id, target_entity_id, relation_type, timestamp, source, source_id, properties)
@@ -159,7 +171,7 @@ class MySQLService:
             return None
     
     def query_temporal_graph(self, entities, time_range=None):
-        """Query the temporal knowledge graph"""
+        """Query the temporal knowledge graph with chronological ordering"""
         if not self.connection:
             return {"nodes": [], "relationships": []}
         
@@ -188,7 +200,8 @@ class MySQLService:
                 query += " AND r.timestamp BETWEEN %s AND %s"
                 params.extend([time_range.get('start'), time_range.get('end')])
             
-            query += " ORDER BY r.timestamp"
+            # Order by timestamp (oldest first) for temporal sequence
+            query += " ORDER BY r.timestamp ASC"
             
             self.cursor.execute(query, params)
             results = self.cursor.fetchall()
@@ -214,7 +227,7 @@ class MySQLService:
                         'label': row['target_name']
                     }
                 
-                # Add relationship
+                # Add relationship with timestamp
                 relationships.append({
                     'source': row['source_name'],
                     'source_type': row['source_type'],
@@ -242,6 +255,7 @@ class MySQLService:
         
         try:
             self.cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
+            self.cursor.execute("DELETE FROM chat_history")
             self.cursor.execute("DELETE FROM relationships")
             self.cursor.execute("DELETE FROM entities")
             self.cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
@@ -262,9 +276,13 @@ class MySQLService:
             self.cursor.execute("SELECT COUNT(*) as count FROM relationships")
             relationships_count = self.cursor.fetchone()['count']
             
+            self.cursor.execute("SELECT COUNT(*) as count FROM chat_history")
+            history_count = self.cursor.fetchone()['count']
+            
             return {
                 'entities': entities_count,
-                'relationships': relationships_count
+                'relationships': relationships_count,
+                'history': history_count
             }
         except Error as e:
             print(f"❌ Error getting stats: {e}")

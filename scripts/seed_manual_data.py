@@ -4,7 +4,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from backend.services.mysql_service import MySQLService
 
-# Pre-defined entities and relationships
+# Pre-defined entities and relationships with temporal data
 data = {
     "entities": [
         {"name": "Rahul", "type": "Person", "source": "Slack", "source_id": "slack_001"},
@@ -14,6 +14,8 @@ data = {
         {"name": "GCP", "type": "Technology", "source": "Slack", "source_id": "slack_002"},
         {"name": "CLOUD-102", "type": "Project", "source": "Jira", "source_id": "CLOUD-102"},
         {"name": "GCP Migration", "type": "Decision", "source": "Jira", "source_id": "CLOUD-102"},
+        {"name": "CLOUD-105", "type": "Project", "source": "Jira", "source_id": "CLOUD-105"},
+        {"name": "CLOUD-108", "type": "Project", "source": "Jira", "source_id": "CLOUD-108"},
     ],
     "relationships": [
         {"source": "Rahul", "target": "AWS", "relation": "REPORTED_COST_ISSUE", "timestamp": "2023-03-10"},
@@ -23,11 +25,13 @@ data = {
         {"source": "Rahul", "target": "GCP", "relation": "IMPLEMENTED", "timestamp": "2023-04-20"},
         {"source": "Amit", "target": "GCP", "relation": "DEPLOYED", "timestamp": "2023-04-25"},
         {"source": "GCP", "target": "AWS", "relation": "REPLACES", "timestamp": "2023-05-15"},
+        {"source": "Rahul", "target": "CLOUD-105", "relation": "ASSIGNED_TO", "timestamp": "2023-04-01"},
+        {"source": "Amit", "target": "CLOUD-108", "relation": "ASSIGNED_TO", "timestamp": "2023-04-15"},
     ]
 }
 
 def seed_data():
-    print("🌱 Seeding manual data...")
+    print("🌱 Seeding manual data with temporal relationships...")
     mysql = MySQLService()
     
     if not mysql.connection:
@@ -48,9 +52,9 @@ def seed_data():
         )
         if entity_id:
             entity_ids[entity["name"]] = entity_id
-            print(f"  ✅ Created entity: {entity['name']}")
+            print(f"  ✅ Created entity: {entity['name']} ({entity['type']})")
     
-    # Create relationships
+    # Create relationships with timestamps
     for rel in data["relationships"]:
         source_id = entity_ids.get(rel["source"])
         target_id = entity_ids.get(rel["target"])
@@ -63,7 +67,7 @@ def seed_data():
                 source="Manual",
                 source_id_ref="seed_data"
             )
-            print(f"  ✅ Created relationship: {rel['source']} -> {rel['target']} ({rel['relation']})")
+            print(f"  ✅ Created relationship: {rel['source']} -> {rel['target']} ({rel['relation']}) at {rel['timestamp']}")
     
     stats = mysql.get_stats()
     print(f"\n📊 Total entities: {stats.get('entities', 0)}")
