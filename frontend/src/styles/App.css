@@ -644,3 +644,416 @@
   background: #0a0e17;
   border-radius: 12px;
 }
+/* ========== IMPROVED ANSWER STYLING ========== */
+
+/* Answer Container */
+.answer-container {
+  background: linear-gradient(145deg, #121926, #0d1520);
+  border-radius: 16px;
+  padding: 30px;
+  border: 1px solid #1a2a3a;
+  margin-top: 25px;
+  animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Answer Header */
+.answer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #1a2a3a;
+}
+
+.answer-header h2 {
+  color: #e0e0e0;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Answer Body */
+.answer-body {
+  color: #c8d0dc;
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+/* Headings */
+.answer-heading {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 25px 0 15px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #4a6cf7;
+  display: inline-block;
+}
+
+.answer-subheading {
+  color: #e8e8f0;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 20px 0 12px 0;
+}
+
+/* Text */
+.answer-text {
+  color: #c8d0dc;
+  margin: 8px 0;
+  line-height: 1.8;
+}
+
+.answer-text strong {
+  color: #4facfe;
+  font-weight: 600;
+}
+
+/* Lists */
+.answer-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.answer-list-item {
+  padding: 8px 12px 8px 28px;
+  position: relative;
+  color: #c8d0dc;
+  border-left: 3px solid #4a6cf7;
+  margin: 4px 0;
+  background: rgba(74, 108, 247, 0.05);
+  border-radius: 0 6px 6px 0;
+  transition: all 0.3s ease;
+}
+
+.answer-list-item:hover {
+  background: rgba(74, 108, 247, 0.1);
+  transform: translateX(5px);
+}
+
+.answer-list-item::before {
+  content: "▸";
+  position: absolute;
+  left: 8px;
+  color: #4a6cf7;
+  font-weight: bold;
+}
+
+/* Tables */
+.answer-table {
+  background: #0d1520;
+  border-radius: 10px;
+  border: 1px solid #1a2a3a;
+  overflow: hidden;
+  margin: 15px 0;
+  width: 100%;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 0.5fr 3fr 1fr;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid #1a2a3a;
+  transition: background 0.3s ease;
+}
+
+.table-row:last-child {
+  border-bottom: none;
+}
+
+.table-row:first-child {
+  background: rgba(74, 108, 247, 0.15);
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.table-row:hover {
+  background: rgba(74, 108, 247, 0.05);
+}
+
+.table-cell {
+  color: #c8d0dc;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.table-cell:first-child {
+  font-weight: 600;
+  color: #4facfe;
+}
+
+/* Divider */
+.answer-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #1a2a3a, transparent);
+  margin: 20px 0;
+}
+
+/* Investigation Sections */
+.investigation-section {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 2px solid #1a2a3a;
+}
+
+.investigation-section h3 {
+  color: #6c8ba0;
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Mini Timeline */
+.mini-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mini-timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 16px;
+  background: #0d1520;
+  border-radius: 8px;
+  border-left: 3px solid #4a6cf7;
+  transition: all 0.3s ease;
+}
+
+.mini-timeline-item:hover {
+  transform: translateX(5px);
+  background: #121926;
+}
+
+.mini-timeline-date {
+  color: #4facfe;
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 100px;
+  font-family: 'Courier New', monospace;
+}
+
+.mini-timeline-event {
+  color: #e0e0e0;
+  flex: 1;
+  font-size: 14px;
+}
+
+.mini-timeline-source {
+  font-size: 11px;
+  padding: 3px 12px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 500;
+  background: #4a6cf7;
+}
+
+.mini-timeline-source:has([source="Slack"]) { background: #4a6cf7; }
+.mini-timeline-source:has([source="GitHub"]) { background: #6e5494; }
+.mini-timeline-source:has([source="Jira"]) { background: #0052cc; }
+
+/* Sources List */
+.sources-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.source-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  background: #0d1520;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.source-item:hover {
+  transform: translateX(5px);
+  background: #121926;
+}
+
+.source-badge {
+  font-size: 11px;
+  padding: 3px 12px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 500;
+  min-width: 60px;
+  text-align: center;
+  background: #4a6cf7;
+}
+
+.source-detail {
+  color: #e0e0e0;
+  flex: 1;
+  font-size: 14px;
+}
+
+.source-date {
+  color: #6c8ba0;
+  font-size: 12px;
+}
+
+/* Export Button */
+.export-btn {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.export-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(40, 167, 69, 0.4);
+}
+
+.export-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .answer-container {
+    padding: 20px;
+  }
+  
+  .table-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 8px 12px;
+  }
+  
+  .table-cell {
+    font-size: 13px;
+  }
+  
+  .table-cell:first-child {
+    font-weight: 600;
+  }
+  
+  .mini-timeline-item {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .mini-timeline-date {
+    min-width: 80px;
+    font-size: 12px;
+  }
+  
+  .source-item {
+    flex-wrap: wrap;
+  }
+  
+  .answer-heading {
+    font-size: 20px;
+  }
+  
+  .answer-subheading {
+    font-size: 16px;
+  }
+}
+
+/* Special styling for connection diagrams */
+.connection-diagram {
+  background: #0d1520;
+  border-radius: 10px;
+  padding: 20px;
+  font-family: 'Courier New', monospace;
+  color: #4facfe;
+  border: 1px solid #1a2a3a;
+  margin: 15px 0;
+  white-space: pre-wrap;
+  line-height: 1.8;
+}
+/* ========== CONNECTION DIAGRAM STYLES ========== */
+
+/* Connection diagram arrows */
+.connection-arrow {
+  color: #4a6cf7;
+  font-weight: bold;
+  margin: 0 4px;
+}
+
+.connection-text {
+  color: #c8d0dc;
+}
+
+.connection-highlight {
+  color: #4facfe;
+  font-weight: 600;
+}
+
+/* Connection diagram container */
+.connection-diagram {
+  background: #0d1520;
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-family: 'Courier New', monospace;
+  color: #4facfe;
+  border: 1px solid #1a2a3a;
+  margin: 12px 0;
+  white-space: pre-wrap;
+  line-height: 1.8;
+  font-size: 14px;
+  overflow-x: auto;
+}
+
+.connection-diagram:hover {
+  border-color: #4a6cf7;
+  box-shadow: 0 0 20px rgba(74, 108, 247, 0.1);
+}
+
+/* Connection arrows in diagrams */
+.connection-diagram .arrow {
+  color: #4a6cf7;
+  font-weight: bold;
+}
+
+.connection-diagram .highlight {
+  color: #4facfe;
+  font-weight: 600;
+}
+
+.connection-diagram .entity {
+  color: #e0e0e0;
+  font-weight: 600;
+}
+
+/* Responsive connection diagrams */
+@media (max-width: 768px) {
+  .connection-diagram {
+    font-size: 12px;
+    padding: 12px 14px;
+    white-space: pre-wrap;
+  }
+}
