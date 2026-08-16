@@ -1057,3 +1057,131 @@
     white-space: pre-wrap;
   }
 }
+/* ========== KNOWLEDGE GRAPH STYLES ========== */
+
+.graph-container {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Node hover effects */
+.react-flow__node {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.react-flow__node:hover {
+  transform: scale(1.08) !important;
+  box-shadow: 0 0 30px rgba(74, 108, 247, 0.4) !important;
+  z-index: 10 !important;
+}
+
+.react-flow__node.selected {
+  box-shadow: 0 0 40px rgba(74, 108, 247, 0.6) !important;
+  border-color: #4a6cf7 !important;
+  z-index: 10 !important;
+}
+
+/* Edge hover effects */
+.react-flow__edge:hover {
+  stroke-width: 4px !important;
+  filter: drop-shadow(0 0 8px rgba(74, 108, 247, 0.3));
+}
+
+.react-flow__edge .react-flow__edge-path {
+  transition: all 0.3s ease;
+}
+
+/* Controls styling */
+.react-flow__controls {
+  background: rgba(18, 25, 38, 0.9) !important;
+  border: 1px solid #1a2a3a !important;
+  border-radius: 10px !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.react-flow__controls button {
+  background: transparent !important;
+  border: none !important;
+  color: #a0b0c0 !important;
+  padding: 6px 10px !important;
+  transition: all 0.3s ease !important;
+}
+
+.react-flow__controls button:hover {
+  background: rgba(74, 108, 247, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.react-flow__controls button:active {
+  background: rgba(74, 108, 247, 0.3) !important;
+}
+
+/* MiniMap styling */
+.react-flow__minimap {
+  background: rgba(10, 14, 23, 0.9) !important;
+  border: 1px solid #1a2a3a !important;
+  border-radius: 8px !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.react-flow__minimap .react-flow__minimap-node {
+  border-radius: 4px !important;
+}
+
+/* Background dots */
+.react-flow__background {
+  opacity: 0.5;
+}
+
+/* Attribution */
+.react-flow__attribution {
+  color: #6c8ba0 !important;
+  font-size: 10px !important;
+  background: rgba(10, 14, 23, 0.8) !important;
+  padding: 4px 12px !important;
+  border-radius: 4px !important;
+}
+
+/* Panel styling */
+.react-flow__panel {
+  margin: 0 !important;
+}
+
+/* Connection line */
+.react-flow__connectionline {
+  stroke: #4a6cf7 !important;
+  stroke-width: 2px !important;
+}
+
+/* Node selection animation */
+@keyframes nodePulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(74, 108, 247, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(74, 108, 247, 0.6);
+  }
+}
+
+.node-selected {
+  animation: nodePulse 2s infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .graph-container {
+    height: 450px !important;
+  }
+  
+  .graph-stats {
+    font-size: 11px !important;
+    padding: 8px 12px !important;
+  }
+  
+  .react-flow__node {
+    font-size: 11px !important;
+    padding: 6px 12px !important;
+    min-width: 80px !important;
+  }
+}
