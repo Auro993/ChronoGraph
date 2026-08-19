@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react'
+﻿import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import './styles/App.css'
 
@@ -21,26 +21,22 @@ function App() {
   const formatAnswer = (text) => {
     if (!text) return null;
     
-    // Split into lines
     const lines = text.split('\n');
     const formattedLines = [];
     
     for (let i = 0; i < lines.length; i++) {
       let line = lines[i];
       
-      // Check for headers (##)
       if (line.startsWith('## ')) {
         formattedLines.push(
           <h2 key={i} className="answer-heading">{line.substring(3)}</h2>
         );
       }
-      // Check for sub-headers (###)
       else if (line.startsWith('### ')) {
         formattedLines.push(
           <h3 key={i} className="answer-subheading">{line.substring(4)}</h3>
         );
       }
-      // Check for bold text (**text**)
       else if (line.includes('**')) {
         const parts = line.split(/\*\*(.*?)\*\*/g);
         const formatted = parts.map((part, idx) => {
@@ -53,26 +49,20 @@ function App() {
           <p key={i} className="answer-text">{formatted}</p>
         );
       }
-      // Check for bullet points (- or *)
       else if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
         formattedLines.push(
           <li key={i} className="answer-list-item">{line.trim().substring(2)}</li>
         );
       }
-      // Check for numbered items (1., 2., etc.)
       else if (/^\d+\./.test(line.trim())) {
         formattedLines.push(
           <li key={i} className="answer-list-item">{line.trim()}</li>
         );
       }
-      // Check for tables (|)
       else if (line.includes('|') && line.trim().startsWith('|')) {
-        // Check if it's a header separator (|---|)
         if (line.includes('---')) {
-          // Skip separator lines
           continue;
         }
-        
         const cells = line.split('|').filter(cell => cell.trim());
         if (cells.length > 0) {
           formattedLines.push(
@@ -84,23 +74,19 @@ function App() {
           );
         }
       }
-      // Check for horizontal rules (---)
       else if (line.trim() === '---') {
         formattedLines.push(
           <hr key={i} className="answer-divider" />
         );
       }
-      // Check for connection diagrams (contains → or ↓)
       else if (line.includes('→') || line.includes('↓')) {
         formattedLines.push(
           <div key={i} className="connection-diagram">{line}</div>
         );
       }
-      // Empty line
       else if (line.trim() === '') {
-        // Skip empty lines or add spacing
+        // Skip empty lines
       }
-      // Regular text
       else {
         formattedLines.push(
           <p key={i} className="answer-text">{line}</p>
@@ -108,7 +94,6 @@ function App() {
       }
     }
     
-    // Wrap bullet points in a list
     const wrappedLines = [];
     let inList = false;
     let listItems = [];
@@ -134,7 +119,6 @@ function App() {
       }
     }
     
-    // Handle any remaining list items
     if (inList && listItems.length > 0) {
       wrappedLines.push(
         <ul key="list-end" className="answer-list">
@@ -143,7 +127,6 @@ function App() {
       );
     }
     
-    // Handle tables separately
     const finalOutput = [];
     let tableRows = [];
     let inTable = false;
@@ -388,37 +371,155 @@ function App() {
   )
 }
 
+// ============================================
+// DASHBOARD - UPDATED WITH SMALLER CARDS
+// ============================================
+
 function Dashboard() {
+  const [recentActivity, setRecentActivity] = useState([]);
+
+  useEffect(() => {
+    const activities = [
+      { user: 'Rahul', action: 'reported AWS cost issue', time: '2 hours ago', type: 'slack' },
+      { user: 'Priya', action: 'proposed GCP migration', time: '1 day ago', type: 'slack' },
+      { user: 'System', action: 'CLOUD-102 created', time: '3 days ago', type: 'jira' },
+      { user: 'Rahul', action: 'deployed GCP configuration', time: '1 week ago', type: 'github' },
+      { user: 'Amit', action: 'completed GCP deployment', time: '1 week ago', type: 'github' },
+    ];
+    setRecentActivity(activities);
+  }, []);
+
+  const getActivityIcon = (type) => {
+    const icons = { slack: '💬', github: '🐙', jira: '📋' };
+    return icons[type] || '📌';
+  };
+
+  const getActivityColor = (type) => {
+    const colors = { slack: '#4a6cf7', github: '#6e5494', jira: '#0052cc' };
+    return colors[type] || '#6c8ba0';
+  };
+
   return (
     <div className="dashboard">
-      <h1>ChronoGraph Dashboard</h1>
-      <p className="subtitle">Enterprise Temporal Intelligence</p>
-      
+      <div className="dashboard-header">
+        <h1>📊 ChronoGraph Dashboard</h1>
+        <p className="subtitle">Enterprise Temporal Intelligence • Real-time Engineering Insights</p>
+      </div>
+
+      {/* Stats Grid - 6 smaller cards */}
       <div className="stats-grid">
         <div className="stat-card">
-          <h3>Knowledge Graph</h3>
-          <div className="stat-number">1,248</div>
-          <div>Nodes</div>
+          <div className="stat-icon">📊</div>
+          <div className="stat-content">
+            <h3>Knowledge Graph</h3>
+            <div className="stat-number">1,248</div>
+            <div className="stat-label">Total Nodes</div>
+            <div className="stat-change positive">↑ 12.5%</div>
+          </div>
         </div>
         <div className="stat-card">
-          <h3>Relationships</h3>
-          <div className="stat-number">3,420</div>
-          <div>Connections</div>
+          <div className="stat-icon">🔗</div>
+          <div className="stat-content">
+            <h3>Relationships</h3>
+            <div className="stat-number">3,420</div>
+            <div className="stat-label">Connections</div>
+            <div className="stat-change positive">↑ 8.3%</div>
+          </div>
         </div>
         <div className="stat-card">
-          <h3>Historical Events</h3>
-          <div className="stat-number">856</div>
-          <div>Records</div>
+          <div className="stat-icon">📅</div>
+          <div className="stat-content">
+            <h3>Historical Events</h3>
+            <div className="stat-number">856</div>
+            <div className="stat-label">Records Analyzed</div>
+            <div className="stat-change positive">↑ 5.7%</div>
+          </div>
         </div>
         <div className="stat-card">
-          <h3>Data Sources</h3>
-          <div className="stat-number">3</div>
-          <div>Connected</div>
+          <div className="stat-icon">📡</div>
+          <div className="stat-content">
+            <h3>Data Sources</h3>
+            <div className="stat-number">3</div>
+            <div className="stat-label">Connected</div>
+            <div className="stat-change success">✅ All Active</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon">🤖</div>
+          <div className="stat-content">
+            <h3>AI Queries</h3>
+            <div className="stat-number">247</div>
+            <div className="stat-label">Questions Asked</div>
+            <div className="stat-change positive">↑ 23.4%</div>
+          </div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-icon">⏱️</div>
+          <div className="stat-content">
+            <h3>Avg Response</h3>
+            <div className="stat-number">2.4s</div>
+            <div className="stat-label">Response Time</div>
+            <div className="stat-change positive">↑ 15% faster</div>
+          </div>
         </div>
       </div>
 
-      <div className="dashboard-sources">
-        <h2>Data Sources</h2>
+      {/* Charts Section */}
+      <div className="charts-grid">
+        <div className="chart-card">
+          <h3>📈 Activity Overview</h3>
+          <div className="activity-bars">
+            <div className="bar-item">
+              <span className="bar-label">Slack</span>
+              <div className="bar-track">
+                <div className="bar-fill" style={{ width: '75%', background: '#4a6cf7' }}></div>
+              </div>
+              <span className="bar-value">75%</span>
+            </div>
+            <div className="bar-item">
+              <span className="bar-label">GitHub</span>
+              <div className="bar-track">
+                <div className="bar-fill" style={{ width: '60%', background: '#6e5494' }}></div>
+              </div>
+              <span className="bar-value">60%</span>
+            </div>
+            <div className="bar-item">
+              <span className="bar-label">Jira</span>
+              <div className="bar-track">
+                <div className="bar-fill" style={{ width: '45%', background: '#0052cc' }}></div>
+              </div>
+              <span className="bar-value">45%</span>
+            </div>
+          </div>
+          <div className="chart-footer">Source Distribution</div>
+        </div>
+
+        <div className="chart-card">
+          <h3>📊 Quick Stats</h3>
+          <div className="quick-stats">
+            <div className="quick-stat-item">
+              <span className="qs-label">Total Entities</span>
+              <span className="qs-value">1,248</span>
+            </div>
+            <div className="quick-stat-item">
+              <span className="qs-label">Relationships</span>
+              <span className="qs-value">3,420</span>
+            </div>
+            <div className="quick-stat-item">
+              <span className="qs-label">AI Confidence</span>
+              <span className="qs-value">94%</span>
+            </div>
+            <div className="quick-stat-item">
+              <span className="qs-label">Uptime</span>
+              <span className="qs-value">99.9%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Data Sources */}
+      <div className="dashboard-section">
+        <h2>🔌 Data Sources</h2>
         <div className="sources-grid-mini">
           <div className="source-card-mini">
             <div className="source-icon" style={{ background: '#4a6cf7' }}>💬</div>
@@ -444,6 +545,36 @@ function Dashboard() {
             </div>
             <span className="status-badge">✅ Connected</span>
           </div>
+        </div>
+      </div>
+
+      {/* Recent Activity */}
+      <div className="dashboard-section">
+        <h2>🔄 Recent Activity</h2>
+        <div className="activity-list">
+          {recentActivity.map((activity, index) => (
+            <div key={index} className="activity-item">
+              <div className="activity-icon" style={{ background: getActivityColor(activity.type) }}>
+                {getActivityIcon(activity.type)}
+              </div>
+              <div className="activity-content">
+                <div className="activity-text">
+                  <strong>{activity.user}</strong> {activity.action}
+                </div>
+                <div className="activity-time">{activity.time}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="dashboard-footer">
+        <p>© 2024 ChronoGraph • Built with ❤️ • Enterprise Temporal Intelligence</p>
+        <div className="footer-stats">
+          <span>📊 1,248 Nodes</span>
+          <span>🔗 3,420 Relationships</span>
+          <span>📅 856 Events</span>
         </div>
       </div>
     </div>
