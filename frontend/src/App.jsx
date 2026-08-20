@@ -372,7 +372,7 @@ function App() {
 }
 
 // ============================================
-// DASHBOARD - UPDATED WITH SMALLER CARDS
+// DASHBOARD
 // ============================================
 
 function Dashboard() {
@@ -406,7 +406,6 @@ function Dashboard() {
         <p className="subtitle">Enterprise Temporal Intelligence • Real-time Engineering Insights</p>
       </div>
 
-      {/* Stats Grid - 6 smaller cards */}
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon">📊</div>
@@ -464,7 +463,6 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Charts Section */}
       <div className="charts-grid">
         <div className="chart-card">
           <h3>📈 Activity Overview</h3>
@@ -517,7 +515,6 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Data Sources */}
       <div className="dashboard-section">
         <h2>🔌 Data Sources</h2>
         <div className="sources-grid-mini">
@@ -548,7 +545,6 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Recent Activity */}
       <div className="dashboard-section">
         <h2>🔄 Recent Activity</h2>
         <div className="activity-list">
@@ -568,7 +564,6 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Footer */}
       <div className="dashboard-footer">
         <p>© 2024 ChronoGraph • Built with ❤️ • Enterprise Temporal Intelligence</p>
         <div className="footer-stats">
@@ -601,31 +596,102 @@ function TimelinePage() {
   )
 }
 
+// ============================================
+// DATA SOURCES - REDESIGNED
+// ============================================
+
 function DataSources() {
   const sources = [
-    { name: 'Slack', count: 620, status: 'Connected', icon: '💬', color: '#4a6cf7' },
-    { name: 'GitHub', count: 380, status: 'Connected', icon: '🐙', color: '#6e5494' },
-    { name: 'Jira', count: 248, status: 'Connected', icon: '📋', color: '#0052cc' },
+    { 
+      name: 'Slack', 
+      count: 620, 
+      status: 'Connected', 
+      icon: '💬', 
+      color: '#4a6cf7',
+      description: 'Team communication and collaboration platform',
+      lastSync: '2 minutes ago',
+      records: '620 messages'
+    },
+    { 
+      name: 'GitHub', 
+      count: 380, 
+      status: 'Connected', 
+      icon: '🐙', 
+      color: '#6e5494',
+      description: 'Code repositories and version control',
+      lastSync: '5 minutes ago',
+      records: '380 commits'
+    },
+    { 
+      name: 'Jira', 
+      count: 248, 
+      status: 'Connected', 
+      icon: '📋', 
+      color: '#0052cc',
+      description: 'Project management and issue tracking',
+      lastSync: '10 minutes ago',
+      records: '248 issues'
+    },
   ];
 
   return (
     <div className="page">
-      <h1>Data Sources</h1>
-      <p className="subtitle">Connected enterprise data sources</p>
+      <div className="page-header">
+        <h1>📡 Data Sources</h1>
+        <p className="subtitle">Connected enterprise data sources powering ChronoGraph</p>
+      </div>
+
       <div className="sources-grid">
         {sources.map((source, index) => (
           <div key={index} className="source-card">
-            <div className="source-icon" style={{ background: source.color }}>
-              {source.icon}
+            <div className="source-card-header">
+              <div className="source-icon-large" style={{ background: source.color }}>
+                {source.icon}
+              </div>
+              <div className="source-status-badge">
+                <span className="status-dot"></span>
+                {source.status}
+              </div>
             </div>
             <h3>{source.name}</h3>
-            <div className="source-count">{source.count} records</div>
-            <div className="source-status">
-              <span className="status-dot"></span>
-              {source.status}
+            <p className="source-description">{source.description}</p>
+            <div className="source-stats">
+              <div className="source-stat">
+                <span className="stat-number">{source.count}</span>
+                <span className="stat-label">Records</span>
+              </div>
+              <div className="source-stat">
+                <span className="stat-number">100%</span>
+                <span className="stat-label">Uptime</span>
+              </div>
+              <div className="source-stat">
+                <span className="stat-number">{source.lastSync}</span>
+                <span className="stat-label">Last Sync</span>
+              </div>
+            </div>
+            <div className="source-actions">
+              <button className="source-btn primary">View Records</button>
+              <button className="source-btn secondary">Sync Now</button>
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="sources-footer">
+        <div className="sources-summary">
+          <div className="summary-item">
+            <span className="summary-number">3</span>
+            <span className="summary-label">Connected Sources</span>
+          </div>
+          <div className="summary-item">
+            <span className="summary-number">1,248</span>
+            <span className="summary-label">Total Records</span>
+          </div>
+          <div className="summary-item">
+            <span className="summary-number">100%</span>
+            <span className="summary-label">Data Quality</span>
+          </div>
+        </div>
       </div>
     </div>
   )
