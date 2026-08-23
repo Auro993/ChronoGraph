@@ -94,6 +94,34 @@ Answer:
             print(f"Error generating answer: {e}")
             return "I'm unable to process this question right now."
 
+    def generate_answer_with_evidence(self, question: str, context: str) -> str:
+        """
+        Generate an answer using temporal context with evidence.
+        This is the new method for Temporal GraphRAG.
+        """
+        try:
+            prompt = f"""
+You are ChronoGraph, an enterprise history investigation assistant.
+You help teams understand why decisions were made and how events unfolded over time.
+
+{context}
+
+Based on the evidence provided above, answer the question.
+Be specific about dates, sources, and relationships.
+If the evidence doesn't fully answer the question, acknowledge what you know and what you don't.
+
+Question: {question}
+
+Answer:
+"""
+            response = self.call_with_retry(prompt, max_retries=3)
+            if response:
+                return response.text
+            return "I'm unable to process this question right now due to rate limits."
+        except Exception as e:
+            print(f"Error generating answer with evidence: {e}")
+            return "I'm unable to process this question right now."
+
     def extract_question_entities(self, question: str) -> dict:
         try:
             prompt = f"""
@@ -134,3 +162,38 @@ Provide a concise summary (2-3 sentences per major event):
         except Exception as e:
             print(f"Error generating summary: {e}")
             return "Unable to generate summary."
+
+    def extract_temporal_entities(self, question: str) -> dict:
+        """
+        Extract entities with temporal context from question.
+        This helps with understanding time-based queries.
+        """
+        try:
+            prompt = f"""
+Analyze this question and extract:
+1. The main entities (people, technologies, projects)
+2. The intent (what, why, how, when, who)
+3. Any time references (dates, periods, sequences)
+4. The topic
+
+Question: {question}
+
+Return as JSON:
+{{
+    "entities": ["entity1", "entity2"],
+    "intent": "what|why|how|when|who",
+    "time_references": {{
+        "type": "specific_date|range|sequence|none",
+        "value": "value if applicable"
+    }},
+    "topic": "brief_topic_description"
+}}
+"""
+            response = self.call_with_retry(prompt, max_retries=3)
+            if response:
+                result = json.loads(response.text)
+                return result
+            return {"entities": [], "intent": "what", "time_references": {"type": "none", "value": None}, "topic": ""}
+        except Exception as e:
+            print(f"Error extracting temporal entities: {e}")
+            return {"entities": [], "intent": "what", "time_references": {"type": "none", "value": None}, "topic": ""}

@@ -1,15 +1,24 @@
+import os
+from pathlib import Path
+
 class Config:
+    # Gemini
     GEMINI_API_KEY = "AIzaSyDk7R0R3TBkq3a0iTuzarXzjYct2ZPOqzk"
-    GEMINI_MODEL = "models/gemini-1.5-flash"  # Using an available model
+    GEMINI_MODEL = "models/gemini-2.0-flash"
     TEMPERATURE = 0.7
-    NEO4J_URI = "bolt://localhost:7687"
-    NEO4J_USERNAME = "neo4j"
-    NEO4J_PASSWORD = "your_password_here"
+    
+    # MySQL
     MYSQL_HOST = "localhost"
     MYSQL_PORT = 3306
     MYSQL_USER = "root"
     MYSQL_PASSWORD = "Aurosmita"
     MYSQL_DATABASE = "chronograph"
+    
+    # Temporal GraphRAG Settings
+    MAX_EVIDENCE_ITEMS = 10
+    MAX_RELATIONSHIP_HOPS = 3
+    
+    # App
     DEBUG = True
 
 config = Config()
