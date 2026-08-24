@@ -4,13 +4,13 @@
 
 ## 📌 Overview
 
-**ChronoGraph** is an AI-powered enterprise history investigation system designed to help teams understand **why decisions were made, who was involved, and how events evolved over time**.
+**ChronoGraph** is an AI-powered enterprise history investigation system designed to help teams understand **why decisions were made, who was involved, and how events evolved over time**. 
 
 It analyzes historical data from sources such as **Slack, GitHub, and Jira**, extracts entities and relationships using **Google Gemini AI**, stores the information in a structured knowledge graph/database, and uses temporal retrieval to generate **evidence-backed answers, interactive graphs, chronological timelines, and source citations**.
 
 Instead of simply searching documents, ChronoGraph connects historical events and relationships to reconstruct the evolution of engineering decisions.
 
----
+--- 
 
 ## 🎯 Problem Statement
 
