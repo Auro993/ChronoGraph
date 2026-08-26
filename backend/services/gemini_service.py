@@ -3,7 +3,7 @@ import json
 import os
 import time
 
-class GeminiService:
+class GeminiService: 
     def __init__(self):
         # Hardcode the API key directly
         api_key = "AIzaSyDk7R0R3TBkq3a0iTuzarXzjYct2ZPOqzk"
