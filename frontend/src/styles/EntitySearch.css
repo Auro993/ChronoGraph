@@ -1,0 +1,133 @@
+.entity-search {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.search-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: #121926;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 0 12px;
+  transition: all 0.3s ease;
+}
+
+.search-input-wrapper:focus-within {
+  border-color: #667eea;
+  box-shadow: 0 0 20px rgba(102, 126, 234, 0.1);
+}
+
+.search-icon {
+  font-size: 16px;
+  color: #6c8ba0;
+  margin-right: 10px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  color: #e0e0e0;
+  font-size: 14px;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #6c8ba0;
+}
+
+.search-loading {
+  color: #6c8ba0;
+  font-size: 14px;
+  animation: pulse 1s infinite;
+}
+
+.suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #121926;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  margin-top: 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #a0b0c0;
+}
+
+.suggestion-item:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: #ffffff;
+}
+
+.suggestion-icon {
+  font-size: 14px;
+}
+
+.suggestion-text {
+  font-size: 14px;
+}
+
+/* Selected Entity Banner */
+.selected-entity-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: rgba(102, 126, 234, 0.15);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 10px;
+  margin: 10px 0;
+  color: #e0e0e0;
+  font-size: 14px;
+}
+
+.selected-entity-icon {
+  font-size: 16px;
+}
+
+.selected-entity-name {
+  font-weight: 600;
+  color: #667eea;
+}
+
+.selected-entity-clear {
+  background: transparent;
+  border: none;
+  color: #6c8ba0;
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: auto;
+  padding: 0 4px;
+  transition: color 0.3s ease;
+}
+
+.selected-entity-clear:hover {
+  color: #ff6b6b;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@media (max-width: 768px) {
+  .entity-search {
+    max-width: 100%;
+  }
+}

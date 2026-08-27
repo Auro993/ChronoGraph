@@ -8,6 +8,7 @@ import Timeline from './components/Timeline'
 import ChatHistory from './components/ChatHistory'
 import Toast from './components/Toast'
 import LoadingSpinner from './components/LoadingSpinner'
+import EntitySearch from './components/EntitySearch'
 
 function App() {
   const [question, setQuestion] = useState('')
@@ -371,7 +372,6 @@ function Dashboard() {
         <p className="subtitle">Enterprise Temporal Intelligence</p>
       </div>
 
-      {/* Stats Grid - Real numbers */}
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-icon">📊</div>
@@ -423,7 +423,6 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Events Over Time - Simple Chart */}
       <div className="charts-grid">
         <div className="chart-card">
           <h3>📈 Events Over Time</h3>
@@ -475,7 +474,6 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Recent Investigations & Activity */}
       <div className="dashboard-grid">
         <div className="dashboard-section">
           <h2>🔄 Recent Investigations</h2>
@@ -539,7 +537,6 @@ function Investigation({
   return (
     <div className="page investigation-page">
       <div className="investigation-layout">
-        {/* Left Sidebar - Example Questions */}
         <div className="investigation-sidebar">
           <h3>💡 Example Questions</h3>
           <div className="example-questions-list">
@@ -555,7 +552,6 @@ function Investigation({
           </div>
         </div>
 
-        {/* Main Content */}
         <div className="investigation-main">
           <div className="investigation-header">
             <h1>🔍 Investigation</h1>
@@ -602,7 +598,6 @@ function Investigation({
                 {formatAnswer(answer)}
               </div>
 
-              {/* Sources */}
               {sources.length > 0 && (
                 <div className="investigation-section">
                   <h3>📚 Sources</h3>
@@ -618,7 +613,6 @@ function Investigation({
                 </div>
               )}
 
-              {/* Timeline */}
               {timeline.length > 0 && (
                 <div className="investigation-section">
                   <h3>⏳ Timeline</h3>
@@ -634,7 +628,6 @@ function Investigation({
                 </div>
               )}
 
-              {/* Knowledge Graph */}
               {graph.nodes && graph.nodes.length > 0 && (
                 <div className="investigation-section">
                   <h3>🕸️ Knowledge Graph</h3>
@@ -656,10 +649,20 @@ function Investigation({
 }
 
 // ============================================
-// 3. KNOWLEDGE GRAPH PAGE
+// 3. KNOWLEDGE GRAPH PAGE (WITH ENTITY SEARCH)
 // ============================================
 
 function GraphExplorer() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedEntity, setSelectedEntity] = useState(null);
+
+  const handleEntitySelect = (entity) => {
+    setSelectedEntity(entity);
+    setSearchQuery(entity);
+    console.log('🔍 Selected entity:', entity);
+    // You can add logic to highlight the entity in the graph
+  };
+
   return (
     <div className="page graph-page">
       <div className="page-header">
@@ -668,9 +671,10 @@ function GraphExplorer() {
       </div>
 
       <div className="graph-controls">
-        <div className="graph-search">
-          <input type="text" placeholder="Search entity..." className="search-input" />
-        </div>
+        <EntitySearch 
+          onSelect={handleEntitySelect} 
+          placeholder="Search entities..." 
+        />
         <div className="graph-filters">
           <button className="filter-btn active">All</button>
           <button className="filter-btn">People</button>
@@ -680,6 +684,22 @@ function GraphExplorer() {
           <button className="filter-btn">Decisions</button>
         </div>
       </div>
+
+      {selectedEntity && (
+        <div className="selected-entity-banner">
+          <span className="selected-entity-icon">📌</span>
+          <span className="selected-entity-name">{selectedEntity}</span>
+          <button 
+            className="selected-entity-clear"
+            onClick={() => {
+              setSelectedEntity(null);
+              setSearchQuery('');
+            }}
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       <KnowledgeGraph />
 
