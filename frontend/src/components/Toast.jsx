@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import '../styles/Toast.css';
+import '../styles/Toast.css'; 
 
 const Toast = ({ message, type = 'success', duration = 3000, onClose }) => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(true); 
 
   useEffect(() => {
     const timer = setTimeout(() => {
