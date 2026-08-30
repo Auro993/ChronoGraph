@@ -4,7 +4,7 @@ from pathlib import Path
 class Config:
     # Gemini
     GEMINI_API_KEY = "AIzaSyDk7R0R3TBkq3a0iTuzarXzjYct2ZPOqzk"
-    GEMINI_MODEL = "models/gemini-2.0-flash"
+    GEMINI_MODEL = "models/gemini-3.6-flash"
     TEMPERATURE = 0.7
     
     # MySQL

@@ -11,7 +11,7 @@ class GeminiService:
         # Configure Gemini with the key
         genai.configure(api_key=api_key)
         # Use an available model from the list
-        self.model = genai.GenerativeModel("models/gemini-2.0-flash")
+        self.model = genai.GenerativeModel("models/gemini-3.6-flash")
         self.temperature = 0.7
         
         print(f"✅ Gemini service initialized with model: models/gemini-2.0-flash")
