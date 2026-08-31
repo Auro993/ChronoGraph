@@ -2,71 +2,131 @@
     {
         "id": "slack_001",
         "user": "Rahul",
+        "email": "rahul@company.com",
         "channel": "engineering",
         "timestamp": "2023-03-10T09:30:00Z",
-        "message": "AWS infrastructure costs have increased significantly this quarter. We're spending $45K/month now, up from $30K last year."
+        "message": "AWS infrastructure costs have increased significantly this quarter. We're spending $45K/month now, up from $30K last year. We need to find alternatives.",
+        "thread_ts": null,
+        "reply_count": 3,
+        "reactions": ["💡", "🔥", "💰"],
+        "is_pinned": false,
+        "mentions": []
     },
     {
         "id": "slack_002",
         "user": "Priya",
+        "email": "priya@company.com",
         "channel": "architecture",
         "timestamp": "2023-03-15T14:20:00Z",
-        "message": "I've been analyzing our cloud spend. GCP could reduce our infrastructure costs by ~30% with similar performance. We should evaluate migration."
+        "message": "I've been analyzing our cloud spend. GCP could reduce our infrastructure costs by ~30% with similar performance. We should evaluate migration.",
+        "thread_ts": null,
+        "reply_count": 5,
+        "reactions": ["👍", "👏", "💡"],
+        "is_pinned": true,
+        "mentions": ["@channel"]
     },
     {
         "id": "slack_003",
         "user": "Priya",
+        "email": "priya@company.com",
         "channel": "architecture",
         "timestamp": "2023-03-20T11:15:00Z",
-        "message": "Created CLOUD-102 to formally evaluate the AWS to GCP migration. Let's discuss in the next architecture review."
+        "message": "Created CLOUD-102 to formally evaluate the AWS to GCP migration. Let's discuss in the next architecture review.",
+        "thread_ts": null,
+        "reply_count": 2,
+        "reactions": ["📋", "✅"],
+        "is_pinned": false,
+        "mentions": ["@architects"]
     },
     {
         "id": "slack_004",
         "user": "Rahul",
+        "email": "rahul@company.com",
         "channel": "engineering",
         "timestamp": "2023-04-05T16:45:00Z",
-        "message": "GCP migration planning is going well. The team is comfortable with the new infrastructure patterns."
+        "message": "GCP migration planning is going well. The team is comfortable with the new infrastructure patterns. We should start phase 1 next week.",
+        "thread_ts": "2023-04-05T16:45:00Z",
+        "reply_count": 4,
+        "reactions": ["🚀", "👍", "✅"],
+        "is_pinned": false,
+        "mentions": ["@engineers"]
     },
     {
         "id": "slack_005",
         "user": "Amit",
+        "email": "amit@company.com",
         "channel": "engineering",
         "timestamp": "2023-04-25T10:00:00Z",
-        "message": "We completed the initial GCP deployment. Latency is actually better than AWS in some regions."
+        "message": "We completed the initial GCP deployment. Latency is actually better than AWS in some regions. Migration is progressing smoothly.",
+        "thread_ts": null,
+        "reply_count": 6,
+        "reactions": ["🎉", "🔥", "🌟"],
+        "is_pinned": true,
+        "mentions": ["@channel"]
     },
     {
         "id": "slack_006",
         "user": "Rahul",
+        "email": "rahul@company.com",
         "channel": "engineering",
         "timestamp": "2023-05-15T13:30:00Z",
-        "message": "MIGRATION COMPLETE: All services are now running on GCP. Final AWS shutdown scheduled for next week."
+        "message": "MIGRATION COMPLETE: All services are now running on GCP. Final AWS shutdown scheduled for next week. Great job everyone!",
+        "thread_ts": null,
+        "reply_count": 8,
+        "reactions": ["🎉", "👏", "🚀", "🌟", "❤️"],
+        "is_pinned": true,
+        "mentions": ["@channel"]
     },
     {
         "id": "slack_007",
         "user": "Priya",
+        "email": "priya@company.com",
         "channel": "architecture",
         "timestamp": "2023-03-22T10:00:00Z",
-        "message": "I've created a detailed migration plan. We'll move services in phases starting with non-critical workloads."
+        "message": "I've created a detailed migration plan. We'll move services in phases starting with non-critical workloads. Timeline: April - May 2023.",
+        "thread_ts": null,
+        "reply_count": 3,
+        "reactions": ["📋", "👍", "📊"],
+        "is_pinned": false,
+        "mentions": ["@architects"]
     },
     {
         "id": "slack_008",
         "user": "Rahul",
+        "email": "rahul@company.com",
         "channel": "engineering",
         "timestamp": "2023-04-01T15:30:00Z",
-        "message": "Phase 1 migration started. API gateway is now running on GCP Cloud Run. No issues so far."
+        "message": "Phase 1 migration started. API gateway is now running on GCP Cloud Run. No issues so far. Performance is good.",
+        "thread_ts": "2023-04-01T15:30:00Z",
+        "reply_count": 2,
+        "reactions": ["🚀", "✅"],
+        "is_pinned": false,
+        "mentions": ["@engineers"]
     },
     {
         "id": "slack_009",
         "user": "Amit",
+        "email": "amit@company.com",
         "channel": "engineering",
         "timestamp": "2023-04-10T09:15:00Z",
-        "message": "Database migration to GCP Cloud SQL is in progress. We're doing a phased approach with minimal downtime."
+        "message": "Database migration to GCP Cloud SQL is in progress. We're doing a phased approach with minimal downtime. Expected completion: April 20.",
+        "thread_ts": null,
+        "reply_count": 2,
+        "reactions": ["📊", "⏳"],
+        "is_pinned": false,
+        "mentions": ["@db_team"]
     },
     {
         "id": "slack_010",
         "user": "Priya",
+        "email": "priya@company.com",
         "channel": "architecture",
         "timestamp": "2023-05-01T11:00:00Z",
-        "message": "All critical services are now on GCP. The migration has been successful! Thanks everyone for the hard work."
+        "message": "All critical services are now on GCP. The migration has been successful! Thanks everyone for the hard work. Time to celebrate!",
+        "thread_ts": null,
+        "reply_count": 7,
+        "reactions": ["🎉", "👏", "🌟", "💪", "❤️"],
+        "is_pinned": true,
+        "mentions": ["@channel", "@architects"]
     }
 ]
