@@ -1,51 +1,113 @@
 [
     {
-        "id": "commit_001", 
+        "id": "commit_001",
         "author": "Priya",
+        "email": "priya@company.com",
         "timestamp": "2023-03-18T10:30:00Z",
         "message": "docs: Add GCP migration evaluation proposal",
-        "files": ["docs/gcp_migration.md"]
+        "files": ["docs/gcp_migration.md", "docs/cloud_comparison.md"],
+        "branch": "main",
+        "additions": 150,
+        "deletions": 0,
+        "description": "Initial proposal document for GCP migration evaluation. Includes cost comparison and migration strategy."
     },
     {
         "id": "commit_002",
         "author": "Rahul",
+        "email": "rahul@company.com",
         "timestamp": "2023-04-20T08:15:00Z",
-        "message": "Add initial GCP deployment configuration",
-        "files": ["terraform/gcp/main.tf", "terraform/gcp/variables.tf"]
+        "message": "feat: Add initial GCP deployment configuration",
+        "files": [
+            "terraform/gcp/main.tf",
+            "terraform/gcp/variables.tf",
+            "terraform/gcp/outputs.tf",
+            "terraform/gcp/terraform.tfvars.example"
+        ],
+        "branch": "feature/gcp-migration",
+        "additions": 320,
+        "deletions": 0,
+        "description": "Initial Terraform configuration for GCP infrastructure. Sets up VPC, subnets, and compute resources."
     },
     {
         "id": "commit_003",
         "author": "Priya",
+        "email": "priya@company.com",
         "timestamp": "2023-04-25T14:30:00Z",
-        "message": "Migrate API service to GCP Cloud Run",
-        "files": ["api/deploy.yaml", "api/Dockerfile"]
+        "message": "feat: Migrate API service to GCP Cloud Run",
+        "files": [
+            "api/deploy.yaml",
+            "api/Dockerfile",
+            "api/cloudbuild.yaml",
+            "api/requirements.txt"
+        ],
+        "branch": "feature/gcp-migration",
+        "additions": 180,
+        "deletions": 45,
+        "description": "API service containerized and deployed to GCP Cloud Run. Updated CI/CD pipeline for automated deployment."
     },
     {
         "id": "commit_004",
         "author": "Amit",
+        "email": "amit@company.com",
         "timestamp": "2023-05-01T11:20:00Z",
-        "message": "Update database connections for GCP Cloud SQL",
-        "files": ["backend/config/database.py"]
+        "message": "feat: Update database connections for GCP Cloud SQL",
+        "files": [
+            "backend/config/database.py",
+            "backend/migrations/gcp_migration.py",
+            "backend/config/config.yaml"
+        ],
+        "branch": "feature/gcp-database",
+        "additions": 95,
+        "deletions": 30,
+        "description": "Database connection strings updated to point to GCP Cloud SQL. Migration script added for seamless transition."
     },
     {
         "id": "commit_005",
         "author": "Rahul",
+        "email": "rahul@company.com",
         "timestamp": "2023-05-15T16:00:00Z",
-        "message": "Remove AWS-specific configurations",
-        "files": ["terraform/aws/", "aws_config_backup/"]
+        "message": "chore: Remove AWS-specific configurations",
+        "files": [
+            "terraform/aws/",
+            "aws_config_backup/",
+            "docs/aws_cleanup.md",
+            "scripts/aws_cleanup.sh"
+        ],
+        "branch": "main",
+        "additions": 0,
+        "deletions": 450,
+        "description": "AWS infrastructure completely decommissioned. All AWS-specific configurations removed. Cleanup documentation added."
     },
     {
         "id": "commit_006",
         "author": "Priya",
+        "email": "priya@company.com",
         "timestamp": "2023-04-01T09:00:00Z",
         "message": "feat: Add GCP Cloud Run deployment script",
-        "files": ["scripts/deploy_gcp.sh"]
+        "files": [
+            "scripts/deploy_gcp.sh",
+            "scripts/health_check.py",
+            "scripts/monitor_deployment.py"
+        ],
+        "branch": "feature/gcp-migration",
+        "additions": 120,
+        "deletions": 0,
+        "description": "Automated deployment script for GCP Cloud Run. Includes health checks and monitoring setup."
     },
     {
         "id": "commit_007",
         "author": "Amit",
+        "email": "amit@company.com",
         "timestamp": "2023-04-15T13:45:00Z",
-        "message": "Update CI/CD pipeline for GCP deployment",
-        "files": [".github/workflows/gcp-deploy.yml"]
+        "message": "ci: Update CI/CD pipeline for GCP deployment",
+        "files": [
+            ".github/workflows/gcp-deploy.yml",
+            ".github/workflows/gcp-test.yml",
+            ".github/workflows/gcp-staging.yml"
+        ],
+        "branch": "feature/gcp-cicd",
+        "additions": 200,
+        "deletions": 60,
+        "description": "CI/CD pipeline configured for GCP. Added testing, staging, and production deployment workflows."
     }
 ]
