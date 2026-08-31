@@ -1,52 +1,252 @@
 [
     {
-        "id": "CLOUD-102", 
+        "id": "CLOUD-102",
         "title": "Evaluate GCP migration",
-        "description": "Investigate migration from AWS to GCP. Focus on cost reduction and performance improvements.",
+        "description": "Investigate migration from AWS to GCP. Focus on cost reduction and performance improvements. Create detailed migration plan with timelines and resource allocation.",
         "assignee": "Priya",
+        "reporter": "Rahul",
         "created": "2023-03-18T09:00:00Z",
+        "updated": "2023-05-15T16:00:00Z",
         "status": "Completed",
         "priority": "High",
-        "project": "CLOUD"
+        "project": "CLOUD",
+        "sprint": "Sprint 23-01",
+        "story_points": 8,
+        "labels": ["migration", "cloud", "cost-optimization", "evaluation"],
+        "components": ["Architecture", "Cloud"],
+        "fixVersion": "v2.0.0",
+        "comments": [
+            {
+                "user": "Priya",
+                "date": "2023-03-18T10:00:00Z",
+                "text": "Initial analysis shows GCP could save us ~30% on infrastructure costs. Will create detailed migration plan."
+            },
+            {
+                "user": "Rahul",
+                "date": "2023-03-20T09:30:00Z",
+                "text": "I support this migration. Let's start with non-critical services first to minimize risk."
+            },
+            {
+                "user": "Amit",
+                "date": "2023-03-22T14:00:00Z",
+                "text": "Database compatibility looks good. We can migrate PostgreSQL to Cloud SQL with minimal changes."
+            },
+            {
+                "user": "Priya",
+                "date": "2023-04-25T11:00:00Z",
+                "text": "Migration plan approved by architecture team. Moving to implementation phase."
+            },
+            {
+                "user": "Rahul",
+                "date": "2023-05-15T16:00:00Z",
+                "text": "Migration completed successfully! Closing this issue."
+            }
+        ],
+        "attachments": [
+            {
+                "name": "migration_plan.pdf",
+                "size": "2.4 MB",
+                "uploaded": "2023-03-20"
+            },
+            {
+                "name": "cost_analysis.xlsx",
+                "size": "1.8 MB",
+                "uploaded": "2023-03-18"
+            }
+        ]
     },
     {
         "id": "CLOUD-105",
         "title": "Implement GCP deployment pipeline",
-        "description": "Set up CI/CD for GCP using Cloud Build",
+        "description": "Set up CI/CD for GCP using Cloud Build. Automate the deployment process for all services including API, Worker, and Frontend.",
         "assignee": "Rahul",
+        "reporter": "Priya",
         "created": "2023-04-01T10:00:00Z",
+        "updated": "2023-05-01T14:00:00Z",
         "status": "Completed",
         "priority": "High",
-        "project": "CLOUD"
+        "project": "CLOUD",
+        "sprint": "Sprint 23-02",
+        "story_points": 5,
+        "labels": ["ci/cd", "automation", "gcp", "devops"],
+        "components": ["DevOps", "Infrastructure"],
+        "fixVersion": "v2.0.0",
+        "comments": [
+            {
+                "user": "Rahul",
+                "date": "2023-04-01T11:00:00Z",
+                "text": "Started working on the Cloud Build configuration. Will set up separate pipelines for dev, staging, and prod."
+            },
+            {
+                "user": "Priya",
+                "date": "2023-04-05T09:00:00Z",
+                "text": "Make sure to include automated testing in the pipeline."
+            },
+            {
+                "user": "Rahul",
+                "date": "2023-04-20T15:00:00Z",
+                "text": "Pipeline ready for testing. Deployment time reduced from 15 minutes to 5 minutes."
+            },
+            {
+                "user": "Amit",
+                "date": "2023-05-01T12:00:00Z",
+                "text": "Pipeline working perfectly. All services deploying to GCP without issues."
+            }
+        ],
+        "attachments": [
+            {
+                "name": "cloudbuild.yaml",
+                "size": "4.2 KB",
+                "uploaded": "2023-04-02"
+            }
+        ]
     },
     {
         "id": "CLOUD-108",
         "title": "Database migration to Cloud SQL",
-        "description": "Migrate PostgreSQL database from AWS RDS to GCP Cloud SQL",
+        "description": "Migrate PostgreSQL database from AWS RDS to GCP Cloud SQL. Ensure zero data loss and minimal downtime. Plan rollback strategy.",
         "assignee": "Amit",
+        "reporter": "Priya",
         "created": "2023-04-15T13:00:00Z",
+        "updated": "2023-05-10T09:00:00Z",
         "status": "Completed",
         "priority": "Medium",
-        "project": "CLOUD"
+        "project": "CLOUD",
+        "sprint": "Sprint 23-02",
+        "story_points": 5,
+        "labels": ["database", "migration", "postgresql", "cloud-sql"],
+        "components": ["Database", "Backend"],
+        "fixVersion": "v2.0.0",
+        "comments": [
+            {
+                "user": "Amit",
+                "date": "2023-04-15T14:00:00Z",
+                "text": "Database schema is compatible with Cloud SQL. Starting migration soon."
+            },
+            {
+                "user": "Priya",
+                "date": "2023-04-18T10:00:00Z",
+                "text": "Please ensure all data is backed up before migration."
+            },
+            {
+                "user": "Amit",
+                "date": "2023-04-25T09:00:00Z",
+                "text": "Test migration completed. Data integrity verified. Ready for production."
+            },
+            {
+                "user": "Amit",
+                "date": "2023-05-01T11:00:00Z",
+                "text": "Production migration completed with 2 minutes downtime. All data migrated successfully."
+            }
+        ],
+        "attachments": [
+            {
+                "name": "db_migration_script.sql",
+                "size": "156 KB",
+                "uploaded": "2023-04-16"
+            },
+            {
+                "name": "rollback_plan.md",
+                "size": "12 KB",
+                "uploaded": "2023-04-15"
+            }
+        ]
     },
     {
         "id": "CLOUD-112",
         "title": "Decommission AWS infrastructure",
-        "description": "Complete decommissioning of AWS services after successful GCP migration",
+        "description": "Complete decommissioning of AWS services after successful GCP migration. Remove all AWS resources including EC2, RDS, S3, and networking. Ensure no data loss.",
         "assignee": "Rahul",
+        "reporter": "Priya",
         "created": "2023-05-10T11:00:00Z",
+        "updated": "2023-06-01T10:00:00Z",
         "status": "In Progress",
         "priority": "Medium",
-        "project": "CLOUD"
+        "project": "CLOUD",
+        "sprint": "Sprint 23-03",
+        "story_points": 3,
+        "labels": ["aws", "cleanup", "decommission", "cost-savings"],
+        "components": ["Infrastructure", "Cloud"],
+        "fixVersion": "v2.1.0",
+        "comments": [
+            {
+                "user": "Rahul",
+                "date": "2023-05-10T12:00:00Z",
+                "text": "AWS decommissioning plan created. Will execute after final verification of all services on GCP."
+            },
+            {
+                "user": "Priya",
+                "date": "2023-05-12T09:00:00Z",
+                "text": "Please ensure all data is backed up before decommissioning."
+            },
+            {
+                "user": "Rahul",
+                "date": "2023-05-20T15:00:00Z",
+                "text": "AWS EC2 instances terminated. S3 buckets backed up and deleted. RDS instances terminated."
+            },
+            {
+                "user": "Amit",
+                "date": "2023-05-25T10:00:00Z",
+                "text": "Verified all services running on GCP. AWS decommissioning can continue."
+            }
+        ],
+        "attachments": [
+            {
+                "name": "aws_inventory.csv",
+                "size": "245 KB",
+                "uploaded": "2023-05-10"
+            },
+            {
+                "name": "decommission_checklist.md",
+                "size": "18 KB",
+                "uploaded": "2023-05-10"
+            }
+        ]
     },
     {
         "id": "CLOUD-115",
         "title": "Monitor GCP performance post-migration",
-        "description": "Track and analyze performance metrics after AWS to GCP migration",
+        "description": "Track and analyze performance metrics after AWS to GCP migration. Ensure SLAs are met. Compare performance with AWS baseline.",
         "assignee": "Priya",
+        "reporter": "Rahul",
         "created": "2023-05-20T14:00:00Z",
+        "updated": "2023-06-01T09:00:00Z",
         "status": "In Progress",
         "priority": "Low",
-        "project": "CLOUD"
+        "project": "CLOUD",
+        "sprint": "Sprint 23-03",
+        "story_points": 3,
+        "labels": ["monitoring", "performance", "gcp", "analytics"],
+        "components": ["Monitoring", "Analytics"],
+        "fixVersion": "v2.1.0",
+        "comments": [
+            {
+                "user": "Priya",
+                "date": "2023-05-20T15:00:00Z",
+                "text": "Setting up Cloud Monitoring dashboards for all services. Will track latency, error rates, and resource utilization."
+            },
+            {
+                "user": "Rahul",
+                "date": "2023-05-22T09:00:00Z",
+                "text": "Initial metrics show 15% improvement in response times compared to AWS."
+            },
+            {
+                "user": "Priya",
+                "date": "2023-05-28T11:00:00Z",
+                "text": "Cost savings: 32% reduction in monthly cloud spend. Performance metrics meeting all SLAs."
+            }
+        ],
+        "attachments": [
+            {
+                "name": "gcp_performance_dashboard.png",
+                "size": "1.2 MB",
+                "uploaded": "2023-05-21"
+            },
+            {
+                "name": "cost_comparison_report.pdf",
+                "size": "3.4 MB",
+                "uploaded": "2023-05-28"
+            }
+        ]
     }
 ]
