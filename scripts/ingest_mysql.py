@@ -10,7 +10,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 from backend.services.mysql_service import MySQLService
 from backend.services.gemini_service import GeminiService
 
-def load_mock_data():
+def load_mock_data(): 
     """Load mock data from JSON files"""
     print("📂 Loading mock data...")
     data_dir = Path(__file__).parent.parent / "data"
