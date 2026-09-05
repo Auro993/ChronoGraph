@@ -8,7 +8,7 @@ import ReactFlow, {
   Controls,
   MiniMap,
   Background,
-  BackgroundVariant,
+  BackgroundVariant, 
   MarkerType,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
