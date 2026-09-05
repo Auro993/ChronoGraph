@@ -13,7 +13,7 @@ const Toast = ({ message, type = 'success', duration = 3000, onClose }) => {
     return () => clearTimeout(timer);
   }, [duration, onClose]);
 
-  if (!visible) return null;
+  if (!visible) return null; 
 
   const icons = {
     success: '✅',
