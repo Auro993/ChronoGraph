@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException 
 from pydantic import BaseModel
 from backend.services.gemini_service import GeminiService
 from backend.services.mysql_service import MySQLService
